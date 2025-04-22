@@ -8,10 +8,10 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import FloatingMenu from '@/components/FloatingMenu';
-
+import { useRouter } from 'expo-router';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  const router = useRouter();
   return (
     <>
       <Tabs
@@ -35,14 +35,12 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
           }}
         />
-
         <Tabs.Screen
-          name="placeholder"
+          name="pigs"
           options={{
-            tabBarButton: () => null, // ⛔️ sin href
+            href: null, // ⛔️ oculta del tab bar
           }}
         />
-
         <Tabs.Screen
           name="explore"
           options={{
@@ -58,7 +56,7 @@ export default function TabLayout() {
           {
             label: 'Agregar cerdo',
             icon: 'add-circle-outline',
-            onPress: () => console.log('Ir a registrar cerdo'),
+            onPress: () => router.push('/pigs/create'),
           },
           {
             label: 'Agregar peso',

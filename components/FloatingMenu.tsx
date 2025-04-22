@@ -1,6 +1,8 @@
+// 📁 components/FloatingMenu.tsx
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 interface Action {
   label: string;
@@ -10,21 +12,24 @@ interface Action {
 
 const FloatingMenu: React.FC<{ actions: Action[] }> = ({ actions }) => {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
+  
   return (
     <View style={styles.container}>
       {open &&
         actions.map((action, index) => (
           <TouchableOpacity
             key={index}
-            style={[styles.actionButton, { bottom: 80 + index * 60 }]}
+            style={[styles.actionButton, { bottom: 80 + index * 70 }]}
             onPress={() => {
               action.onPress();
               setOpen(false);
             }}
           >
-            <Ionicons name={action.icon} size={20} color="#fff" />
-            <Text style={styles.label}>{action.label}</Text>
+            <View style={styles.innerContent}>
+              <Ionicons name={action.icon} size={22} color="#fff" style={{ marginRight: 10 }} />
+              <Text style={styles.label}>{action.label}</Text>
+            </View>
           </TouchableOpacity>
         ))}
 
@@ -38,9 +43,9 @@ const FloatingMenu: React.FC<{ actions: Action[] }> = ({ actions }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 0,
     alignSelf: 'center',
-    alignItems: 'center',
+    zIndex: 999,
   },
   fab: {
     backgroundColor: '#4A1EC6',
@@ -50,21 +55,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
-    zIndex: 10,
   },
   actionButton: {
     position: 'absolute',
+    left: -60,
+    right: -60,
+    backgroundColor: '#333',
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+  },
+  innerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#333',
-    borderRadius: 30,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    elevation: 5,
   },
   label: {
     color: '#fff',
-    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
