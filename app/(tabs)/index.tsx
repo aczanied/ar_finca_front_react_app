@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import UserHeader from '../../components/UserHeader';
 import AccountCard from '../../components/AccountCard';
 import SegmentedSelector from '../../components/SegmentedSelector';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   type GroupKey = 'corrales' | 'loans' | 'credit';
 
-interface AccountItem {
-  title: string;
-  amount: string;
-  icon: string;
-  color: string;
-}
-const [selectedGroup, setSelectedGroup] = useState<GroupKey>('corrales');
+  interface AccountItem {
+    title: string;
+    amount: string;
+    icon: string;
+    color: string;
+  }
+  const [selectedGroup, setSelectedGroup] = useState<GroupKey>('corrales');
 
   const groups: Record<GroupKey, AccountItem[]> = {
     corrales: [
@@ -50,13 +53,20 @@ const [selectedGroup, setSelectedGroup] = useState<GroupKey>('corrales');
       <View style={styles.cardGrid}>
         {groups[selectedGroup].map((acc, i) => (
           <View style={styles.cardWrapper} key={i}>
-          <AccountCard
-            title={acc.title}
-            amount={acc.amount}
-            icon={acc.icon}
-            backgroundColor={acc.color}
-          />
-        </View>
+            <TouchableOpacity
+              onPress={() => router.push({
+                pathname: '/pigs/list-by-type',
+                params: { type: acc.title.toUpperCase(), status: 'ACTIVO' }
+              })}
+            >
+              <AccountCard
+                title={acc.title}
+                amount={acc.amount}
+                icon={acc.icon}
+                backgroundColor={acc.color}
+              />
+            </TouchableOpacity>
+          </View>
         ))}
       </View>
     </ScrollView>
